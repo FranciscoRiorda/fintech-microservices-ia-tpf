@@ -51,12 +51,8 @@ public class CustomerController {
 
     @GetMapping("/{id}/perfil")
     public ResponseEntity<CustomerPerfilDTO> obtenerPerfilCompleto(@PathVariable Long id) {
-        try {
-            CustomerPerfilDTO perfil = customerService.obtenerPerfilCompleto(id);
-            return ResponseEntity.ok(perfil);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+        CustomerPerfilDTO perfil = customerService.obtenerPerfilCompleto(id);
+        return ResponseEntity.ok(perfil);
     }
 
 }

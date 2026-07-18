@@ -4,6 +4,7 @@ import com.fintech.customerservice.client.ProductServiceClient;
 import com.fintech.customerservice.dto.CustomerDTO;
 import com.fintech.customerservice.dto.CustomerPerfilDTO;
 import com.fintech.customerservice.dto.ProductDTO;
+import com.fintech.customerservice.exception.ClienteNoEncontradoException;
 import com.fintech.customerservice.model.Customer;
 import com.fintech.customerservice.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
@@ -55,7 +56,7 @@ public class CustomerService {
 
     public CustomerPerfilDTO obtenerPerfilCompleto(Long id) {
         Customer customer = customerRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Cliente no encontrado con ID: " + id));
+            .orElseThrow(() -> new ClienteNoEncontradoException(id));
 
         List<ProductDTO> productos = productServiceClient.obtenerProductosPorCliente(id);
 
@@ -81,7 +82,7 @@ public class CustomerService {
 
     private Customer dtoToEntity(CustomerDTO dto) {
         Customer customer = new Customer();
-        customer.setId(dto.id());
+        customer.setId(null);
         customer.setNombre(dto.nombre());
         customer.setDocumento(dto.documento());
         customer.setCorreo(dto.correo());
