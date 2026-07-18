@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "customers")
 @Data
@@ -22,6 +24,6 @@ public class Customer {
 
     private String correo;
 
-    private Double saldo;
+    private BigDecimal saldo;
 
 }
