@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "products")
 @Data
@@ -16,10 +18,12 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String tipo;
-
     private Long clienteId;
 
-    private Double saldo;
+    private String tipo;
+
+    private String descripcion;
+
+    private BigDecimal monto;
 
 }
