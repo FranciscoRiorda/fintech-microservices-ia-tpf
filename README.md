@@ -21,10 +21,10 @@ Ecosistema de microservicios bancarios basado en **Spring Cloud** con descubrimi
          ▼                             ▼
     ┌─────────────┐           ┌──────────────────┐
     │   Eureka    │           │ Customer-Service │
-    │   Server    │           │     (8080)       │
-    │   (8761)    │           │                  │
-    └─────────────┘           │ • CRUD Clientes  │
-         ▲                    │ • Feign Client   │
+    │   Server    │           │     (8761)       │
+    └─────────────┘           │                  │
+         ▲                    │ • CRUD Clientes  │
+         │                    │ • Feign Client   │
          │                    │ • Orquestación   │
          │                    └────────┬─────────┘
          │                             │
@@ -273,6 +273,7 @@ proyecto-final-fintech/
 │   └── src/main/java/com/fintech/productservice/
 │       ├── controller/ProductController.java
 │       ├── service/ProductService.java
+│       ├── mapper/ProductMapper.java         # Nuevo: Clases de mapeo DTO <-> Entity
 │       ├── repository/ProductRepository.java
 │       ├── model/Product.java
 │       ├── dto/ProductDTO.java
@@ -283,6 +284,7 @@ proyecto-final-fintech/
 │   └── src/main/java/com/fintech/customerservice/
 │       ├── controller/CustomerController.java
 │       ├── service/CustomerService.java
+│       ├── mapper/CustomerMapper.java        # Nuevo: Clases de mapeo DTO <-> Entity
 │       ├── repository/CustomerRepository.java
 │       ├── client/ProductServiceClient.java    # Feign Client
 │       ├── model/Customer.java
@@ -318,7 +320,7 @@ proyecto-final-fintech/
 | **JPA/Hibernate** | Incluido en Spring Boot | ORM |
 | **H2 Database** | En memoria | Base de datos local de cada servicio |
 | **Lombok** | Latest | Boilerplate reduction (@Data, @Entity, etc.) |
-| **SpringDoc OpenAPI** | 2.6.0 | Swagger UI y OpenAPI docs |
+| **SpringDoc OpenAPI** | 2.8.5 | Swagger UI y OpenAPI docs |
 | **Maven** | 3.8+ | Build tool |
 
 ---

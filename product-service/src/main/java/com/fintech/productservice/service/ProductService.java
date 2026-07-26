@@ -3,6 +3,7 @@ package com.fintech.productservice.service;
 import com.fintech.productservice.dto.ProductDTO;
 import com.fintech.productservice.model.Product;
 import com.fintech.productservice.repository.ProductRepository;
+import com.fintech.productservice.mapper.ProductMapper; // Import ProductMapper
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,20 +20,20 @@ public class ProductService {
     public List<ProductDTO> obtenerProductosPorCliente(Long clienteId) {
         return productRepository.findByClienteId(clienteId)
             .stream()
-            .map(this::entityToDTO)
+            .map(ProductMapper::toDTO) // Use ProductMapper
             .toList();
     }
 
     public ProductDTO obtenerProductoPorId(Long id) {
         return productRepository.findById(id)
-            .map(this::entityToDTO)
+            .map(ProductMapper::toDTO) // Use ProductMapper
             .orElse(null);
     }
 
     public ProductDTO crearProducto(ProductDTO dto) {
-        Product product = dtoToEntity(dto);
+        Product product = ProductMapper.toEntity(dto); // Use ProductMapper
         Product saved = productRepository.save(product);
-        return entityToDTO(saved);
+        return ProductMapper.toDTO(saved); // Use ProductMapper
     }
 
     public ProductDTO actualizarProducto(Long id, ProductDTO dto) {
@@ -43,7 +44,7 @@ public class ProductService {
                 product.setDescripcion(dto.descripcion());
                 product.setMonto(dto.monto());
                 Product updated = productRepository.save(product);
-                return entityToDTO(updated);
+                return ProductMapper.toDTO(updated); // Use ProductMapper
             })
             .orElse(null);
     }
@@ -55,25 +56,4 @@ public class ProductService {
         }
         return false;
     }
-
-    private ProductDTO entityToDTO(Product product) {
-        return new ProductDTO(
-            product.getId(),
-            product.getClienteId(),
-            product.getTipo(),
-            product.getDescripcion(),
-            product.getMonto()
-        );
-    }
-
-    private Product dtoToEntity(ProductDTO dto) {
-        Product product = new Product();
-        product.setId(dto.id());
-        product.setClienteId(dto.clienteId());
-        product.setTipo(dto.tipo());
-        product.setDescripcion(dto.descripcion());
-        product.setMonto(dto.monto());
-        return product;
-    }
-
 }

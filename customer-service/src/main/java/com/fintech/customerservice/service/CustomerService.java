@@ -7,6 +7,7 @@ import com.fintech.customerservice.dto.ProductDTO;
 import com.fintech.customerservice.exception.ClienteNoEncontradoException;
 import com.fintech.customerservice.model.Customer;
 import com.fintech.customerservice.repository.CustomerRepository;
+import com.fintech.customerservice.mapper.CustomerMapper; // Import CustomerMapper
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,20 +26,20 @@ public class CustomerService {
     public List<CustomerDTO> obtenerTodos() {
         return customerRepository.findAll()
             .stream()
-            .map(this::entityToDTO)
+            .map(CustomerMapper::toDTO) // Use CustomerMapper
             .toList();
     }
 
     public CustomerDTO obtenerPorId(Long id) {
         return customerRepository.findById(id)
-            .map(this::entityToDTO)
+            .map(CustomerMapper::toDTO) // Use CustomerMapper
             .orElse(null);
     }
 
     public CustomerDTO crearCliente(CustomerDTO dto) {
-        Customer customer = dtoToEntity(dto);
+        Customer customer = CustomerMapper.toEntity(dto); // Use CustomerMapper
         Customer saved = customerRepository.save(customer);
-        return entityToDTO(saved);
+        return CustomerMapper.toDTO(saved); // Use CustomerMapper
     }
 
     public CustomerDTO actualizarCliente(Long id, CustomerDTO dto) {
@@ -49,7 +50,7 @@ public class CustomerService {
                 customer.setCorreo(dto.correo());
                 customer.setSaldo(dto.saldo());
                 Customer updated = customerRepository.save(customer);
-                return entityToDTO(updated);
+                return CustomerMapper.toDTO(updated); // Use CustomerMapper
             })
             .orElse(null);
     }
@@ -60,34 +61,16 @@ public class CustomerService {
 
         List<ProductDTO> productos = productServiceClient.obtenerProductosPorCliente(id);
 
+        // Use CustomerMapper for customer data
+        CustomerDTO customerDTO = CustomerMapper.toDTO(customer);
+
         return new CustomerPerfilDTO(
-            customer.getId(),
-            customer.getNombre(),
-            customer.getDocumento(),
-            customer.getCorreo(),
-            customer.getSaldo(),
+            customerDTO.id(),
+            customerDTO.nombre(),
+            customerDTO.documento(),
+            customerDTO.correo(),
+            customerDTO.saldo(),
             productos
         );
     }
-
-    private CustomerDTO entityToDTO(Customer customer) {
-        return new CustomerDTO(
-            customer.getId(),
-            customer.getNombre(),
-            customer.getDocumento(),
-            customer.getCorreo(),
-            customer.getSaldo()
-        );
-    }
-
-    private Customer dtoToEntity(CustomerDTO dto) {
-        Customer customer = new Customer();
-        customer.setId(null);
-        customer.setNombre(dto.nombre());
-        customer.setDocumento(dto.documento());
-        customer.setCorreo(dto.correo());
-        customer.setSaldo(dto.saldo());
-        return customer;
-    }
-
 }
